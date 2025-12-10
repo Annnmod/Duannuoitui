@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, Copy, Check, HeartHandshake } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 interface DonationModalProps {
   isOpen: boolean;
@@ -27,6 +28,33 @@ const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose, amount, 
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const handleConfirm = () => {
+      // Massive Fireworks Effect
+      const duration = 3000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+      const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+      const interval: any = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        // since particles fall down, start a bit higher than random
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+      }, 250);
+
+      // Close modal after effect
+      setTimeout(() => {
+          onClose();
+      }, 3500);
+  }
 
   if (!isOpen) return null;
 
@@ -115,7 +143,7 @@ const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose, amount, 
             </div>
 
             <button 
-              onClick={onClose}
+              onClick={handleConfirm}
               className="w-full py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-all shadow-xl active:scale-95"
             >
               Đã chuyển khoản (Uy tín)

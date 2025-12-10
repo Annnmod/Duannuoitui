@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Star, Coffee, Utensils, Film, Gem, ArrowRight, Zap, TrendingUp, AlertTriangle, Clock, ShieldCheck, Heart, Crown, Rocket, Landmark } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface LandingPageProps {
   onSelectPackage: (amount: string, name: string) => void;
@@ -7,6 +8,19 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onSelectPackage }) => {
   
+  const handleSelect = (amount: string, name: string) => {
+    // Trigger confetti "Pop" effect
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#ef4444', '#eab308', '#3b82f6', '#10b981'], // Red, Yellow, Blue, Green
+      disableForReducedMotion: true
+    });
+
+    onSelectPackage(amount, name);
+  };
+
   const packages = [
     {
       id: 1,
@@ -184,7 +198,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onSelectPackage }) => {
                      </div>
 
                      <div className="mt-4 flex gap-2">
-                         <button onClick={() => onSelectPackage('50.000đ', 'Cứu Trợ Khẩn Cấp')} className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-3 rounded-xl transition-colors">
+                         <button onClick={() => handleSelect('50.000đ', 'Cứu Trợ Khẩn Cấp')} className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-3 rounded-xl transition-colors">
                              PUMP (Bơm tiền)
                          </button>
                          <button disabled className="flex-1 bg-gray-100 text-gray-400 text-xs font-bold py-3 rounded-xl cursor-not-allowed">
@@ -295,7 +309,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onSelectPackage }) => {
 
               {/* Button */}
               <button 
-                onClick={() => onSelectPackage(pkg.price, pkg.name)}
+                onClick={() => handleSelect(pkg.price, pkg.name)}
                 className={`w-full py-4 rounded-xl font-black text-sm uppercase tracking-wide transition-all active:scale-95 flex items-center justify-center gap-2 group-hover:gap-3 ${pkg.btnColor}`}
               >
                 {pkg.id === 6 ? 'Chốt đơn ngay' : 'Đầu tư gói này'} <ArrowRight size={18} />
